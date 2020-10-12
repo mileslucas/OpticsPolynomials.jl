@@ -2,15 +2,14 @@ import .Jacobi
 
 module Zernike
 
-export (
-    zernike_norm,
-    zernike_nm_to_fringe,
-    zernike_nm_to_ansi_j,
-    zernike_ansi_j_to_nm,
-    zernike_noll_to_nm,
-    zernike_fringe_to_nm,
-    zernike_zero_separation
-)
+export zernike_norm,
+       zernike_nm_to_fringe,
+       zernike_nm_to_ansi_j,
+       zernike_ansi_j_to_nm,
+       zernike_noll_to_nm,
+       zernike_fringe_to_nm,
+       zernike_zero_separation
+
 
 """
     kronecker(i,j)
