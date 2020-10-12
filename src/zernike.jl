@@ -2,7 +2,8 @@ import .Jacobi
 
 module Zernike
 
-export zernike_norm,
+export Zernike
+       zernike_norm,
        zernike_nm_to_fringe,
        zernike_nm_to_ansi_j,
        zernike_ansi_j_to_nm,
@@ -10,24 +11,58 @@ export zernike_norm,
        zernike_fringe_to_nm,
        zernike_zero_separation
 
+"""
+    Zernike([T, ]n, m, norm=true)
+
+Zernike polynomial of orders `n` and `m`. If `norm` is true the output will be normalized. The output type can be specified with `T`, which will default to `Float64`.
+
+# Examples
+
+```jldoctest
+julia> z = Zernike(10, 3)
+Zernike{Float64}(n=10, m=3)
+
+julia> z(0.8, 0.2)
+-1.6860955965619917
+
+julia> Zernike(BigFloat, 10, 3)(0.8, 0.2)
+-1.68609559656199170518675600760616362094879150390625
+```
+"""
+struct Zernike{T<:AbstractFloat,F1,F2}
+    n::Int
+    m::Int
+    basis::F1
+    trig_func::F2
+    Zernike{T}(n, m, basis, trig_func) where {T} = new{T,typeof(basis),typeof(trig_func)}(n, m, basis, trig_func)
+end
+
+function Zernike(T, n, m, norm::Bool=true)
+    norm_val = norm ? zernike_norm(n, m) : 1.0
+    trig_func = m < 0 ? sin : cos
+    basis = x -> norm_val * jacobi((n - m) ÷ 2, 0, abs(m), x)
+    Zernike{T}(n, m, basis, trig_func)
+end
+
+Zernike(n, m, norm::Bool=true) = Zernike(Float64, n, m, norm)
+
+function Base.show(io::IO, z::Zernike{T}) where T
+    print(io, "Zernike{$T}(n=$(z.n), m=$(z.m))")
+end
+
+function (z::Zernike{T})(ρ, θ) where T
+    x = ρ^2 - 1
+    return T(ρ^abs(z.m) * z.basis(x) * z.trig_func(z.m * θ))
+end
+    
+
 
 """
     kronecker(i,j)
 
 1 if i==j, else 0; mathematical kronecker function
 """
-function kronecker(i,j)
-    return i==j ? 1 : 0
-end
-
-"""
-    sign(x)
-
--1 if x < 0, else 1.  scalar multiple to indicate sign of x.
-"""
-function sign(x)
-    return x<0 ? -1 : 1
-end
+kronecker(i, j) = Int(i == j)
 
 """
     zernike_norm(n, m)
