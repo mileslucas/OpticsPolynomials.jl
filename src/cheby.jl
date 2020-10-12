@@ -1,4 +1,3 @@
-import .Jacobi
 
 """
     cheby1(n, x)

@@ -1,4 +1,3 @@
-import .Jacobi
 
 """
     legendre(n, x)

@@ -1,7 +1,6 @@
 
-module Jacobi
-
 export jacobi, jacobi_weight
+
 """
     jacobi_weight(α, β, x)
 
@@ -44,7 +43,7 @@ is also linear w.r.t. the size of argument x.
 """
 function jacobi(n, α, β, x)
 	if n == 0
-		return 1
+		return 1.0
 	elseif n == 1
 		return (α + 1) + (α + β + 2) * ((x-1)/2)
 	end
@@ -67,6 +66,4 @@ function jacobi(n, α, β, x)
 		Pn = ((b * Pnm1) - (c * Pnm2)) / a
 	end
 	return Pn
-end
-
 end

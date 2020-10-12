@@ -1,8 +1,4 @@
-import .Jacobi
-
-module Zernike
-
-export Zernike
+export Zernike,
        zernike_norm,
        zernike_nm_to_fringe,
        zernike_nm_to_ansi_j,
@@ -202,6 +198,4 @@ function zernike(n, m, ρ, θ; norm::Bool=true)
 		out *= zernike_norm(n,m)
 	end
     return out
-end
-
 end
